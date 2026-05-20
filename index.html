@@ -163,121 +163,202 @@ if (location.protocol.substr(0, 4) === "file")
 
 <canvas width="1280" height="719" style="width: 1280px; height: 719px; margin-left: 0px; margin-top: 0px;"></canvas><div class="c3htmlwrap" style="width: 1280px; height: 719px; margin-left: 0px; margin-top: 0px;"></div><div class="c3-screen-reader-text" aria-live="polite"></div><script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Inject styles for the notification
+    // Inject enhanced premium styles with the classic energetic color scheme
     const style = document.createElement('style');
     style.textContent = `
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
+
         .custom-notification {
             position: fixed;
-            top: -120px;
+            top: -160px;
             left: 50%;
             transform: translateX(-50%);
             width: 380px;
-            max-width: 90vw;
-            background: linear-gradient(135deg, #1e1e2f 0%, #252538 100%);
+            max-width: 92vw;
+            background: rgba(22, 22, 35, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 16px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            font-family: 'Outfit', sans-serif;
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 
+                        0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+                        0 0 30px rgba(255, 78, 80, 0.1);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             z-index: 999999;
-            transition: top 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            transition: top 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
             opacity: 0;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            text-align: center;
         }
+        
         .custom-notification.show {
-            top: 24px;
+            top: 32px;
             opacity: 1;
         }
-        .notification-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 12px;
-            object-fit: cover;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        
+        .notification-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
         }
+
+        .notification-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
         .notification-content {
-            flex-grow: 1;
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
-        .notification-text {
-            font-size: 13px;
-            font-weight: 600;
-            line-height: 1.4;
-            color: #e0e0e6;
-            margin: 0;
-        }
-        .notification-btn {
-            align-self: flex-start;
-            background: linear-gradient(90deg, #ff4e50 0%, #f9d423 100%);
-            color: #12121c;
-            border: none;
-            padding: 6px 14px;
-            font-size: 11px;
-            font-weight: 700;
-            border-radius: 20px;
-            cursor: pointer;
+
+        .notification-title {
+            font-size: 15px;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: linear-gradient(90deg, #ff4e50 0%, #f9d423 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .notification-text {
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #e2e2ee;
+            margin: 0;
+            padding: 0 10px;
+        }
+
+        .notification-btn {
+            background: linear-gradient(90deg, #ff4e50 0%, #f9d423 100%);
+            color: #0e0e15;
+            border: none;
+            padding: 10px 28px;
+            font-size: 12px;
+            font-weight: 800;
+            border-radius: 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 6px 20px rgba(255, 78, 80, 0.4);
+            animation: pulseGlow 2s infinite;
+        }
+
+        .notification-btn:hover {
+            transform: scale(1.05) translateY(-1px);
+            box-shadow: 0 8px 25px rgba(255, 78, 80, 0.6);
+        }
+
+        .notification-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            padding: 4px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            justify-content: center;
+            transition: color 0.2s ease, transform 0.2s ease;
         }
-        .notification-btn:hover {
-            transform: scale(1.04);
-            box-shadow: 0 0 12px rgba(255, 78, 80, 0.4);
+
+        .notification-close:hover {
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 6px 16px rgba(255, 78, 80, 0.4); }
+            50% { box-shadow: 0 6px 26px rgba(255, 78, 80, 0.7); }
+            100% { box-shadow: 0 6px 16px rgba(255, 78, 80, 0.4); }
         }
     `;
     document.head.appendChild(style);
 
-    // Create notification element
+    // Create revitalized notification element
     const notification = document.createElement('div');
     notification.className = 'custom-notification';
     notification.innerHTML = `
-        <img class="notification-icon" src="https://www2.minijuegosgratis.com/v3/games/thumbnails/253635_1.jpg" alt="Icon">
-        <div class="notification-content">
-            <p class="notification-text">NEW WEBSITE ALERT!! VISIT https://044.netlify.app TO PLAY NOW!</p>
-            <button class="notification-btn">
-                Play Now 
-                <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor" style="margin-left: 2px;">
-                    <path d="M1 1L7 5L1 9Z"/>
-                </svg>
-            </button>
+        <div class="notification-header">
+            <img class="notification-icon" src="https://www2.minijuegosgratis.com/v3/games/thumbnails/253635_1.jpg" alt="GD Wave Icon">
+            <div class="notification-content">
+                <h4 class="notification-title">New Website Alert!</h4>
+                <p class="notification-text">Tap play to experience the brand new GD Wave now!</p>
+            </div>
         </div>
+        <button class="notification-btn">
+            Play Now
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                <path d="M2.5 1.5L8.5 5L2.5 8.5V1.5Z"/>
+            </svg>
+        </button>
+        <button class="notification-close" aria-label="Dismiss alert">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
     `;
     document.body.appendChild(notification);
 
-    // Navigation logic
-    const navigate = () => {
+    // Navigation function
+    const navigate = (e) => {
+        // Prevent action if clicking the close icon
+        if (e.target.closest('.notification-close')) return;
         window.open('https://044.netlify.app', '_blank');
     };
 
     notification.addEventListener('click', navigate);
 
-    // Display functions
+    let autoHideTimeout;
+
+    // Display state controls
     const showNotification = () => {
         notification.classList.add('show');
-        // Automatically hide after 7 seconds
-        setTimeout(hideNotification, 7000);
+        autoHideTimeout = setTimeout(hideNotification, 7000);
     };
 
     const hideNotification = () => {
         notification.classList.remove('show');
+        clearTimeout(autoHideTimeout);
         scheduleNext();
     };
 
-    // Randomize next interval between 15 and 120 seconds
+    // Close listener logic
+    const closeBtn = notification.querySelector('.notification-close');
+    closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Avoid triggering full-body navigation click
+        hideNotification();
+    });
+
+    // Loop interval logic (15s to 120s)
     const scheduleNext = () => {
         const randomTime = Math.floor(Math.random() * (120000 - 15000 + 1)) + 15000;
         setTimeout(showNotification, randomTime);
     };
 
-    // Initial trigger after exactly 1.25 seconds
+    // Initial appearance after 1.25s
     setTimeout(showNotification, 1250);
 });
 </script></body></html>
