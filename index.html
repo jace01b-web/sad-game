@@ -161,4 +161,123 @@ if (location.protocol.substr(0, 4) === "file")
 	<script src="scripts/register-sw.js" type="module"></script>
 
 
-<canvas width="1280" height="719" style="width: 1280px; height: 719px; margin-left: 0px; margin-top: 0px;"></canvas><div class="c3htmlwrap" style="width: 1280px; height: 719px; margin-left: 0px; margin-top: 0px;"></div><div class="c3-screen-reader-text" aria-live="polite"></div></body></html>
+<canvas width="1280" height="719" style="width: 1280px; height: 719px; margin-left: 0px; margin-top: 0px;"></canvas><div class="c3htmlwrap" style="width: 1280px; height: 719px; margin-left: 0px; margin-top: 0px;"></div><div class="c3-screen-reader-text" aria-live="polite"></div><script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Inject styles for the notification
+    const style = document.createElement('style');
+    style.textContent = `
+        .custom-notification {
+            position: fixed;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 380px;
+            max-width: 90vw;
+            background: linear-gradient(135deg, #1e1e2f 0%, #252538 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 999999;
+            transition: top 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            opacity: 0;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .custom-notification.show {
+            top: 24px;
+            opacity: 1;
+        }
+        .notification-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .notification-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .notification-text {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #e0e0e6;
+            margin: 0;
+        }
+        .notification-btn {
+            align-self: flex-start;
+            background: linear-gradient(90deg, #ff4e50 0%, #f9d423 100%);
+            color: #12121c;
+            border: none;
+            padding: 6px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .notification-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 12px rgba(255, 78, 80, 0.4);
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = 'custom-notification';
+    notification.innerHTML = `
+        <img class="notification-icon" src="https://www2.minijuegosgratis.com/v3/games/thumbnails/253635_1.jpg" alt="Icon">
+        <div class="notification-content">
+            <p class="notification-text">NEW WEBSITE ALERT!! VISIT https://044.netlify.app TO PLAY NOW!</p>
+            <button class="notification-btn">
+                Play Now 
+                <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor" style="margin-left: 2px;">
+                    <path d="M1 1L7 5L1 9Z"/>
+                </svg>
+            </button>
+        </div>
+    `;
+    document.body.appendChild(notification);
+
+    // Navigation logic
+    const navigate = () => {
+        window.open('https://044.netlify.app', '_blank');
+    };
+
+    notification.addEventListener('click', navigate);
+
+    // Display functions
+    const showNotification = () => {
+        notification.classList.add('show');
+        // Automatically hide after 7 seconds
+        setTimeout(hideNotification, 7000);
+    };
+
+    const hideNotification = () => {
+        notification.classList.remove('show');
+        scheduleNext();
+    };
+
+    // Randomize next interval between 15 and 120 seconds
+    const scheduleNext = () => {
+        const randomTime = Math.floor(Math.random() * (120000 - 15000 + 1)) + 15000;
+        setTimeout(showNotification, randomTime);
+    };
+
+    // Initial trigger after exactly 1.25 seconds
+    setTimeout(showNotification, 1250);
+});
+</script></body></html>
